@@ -320,7 +320,7 @@ export default function Notes() {
         </Container>
       </main>
       {/* Footer */}
-      <Box sx={{ bgcolor: '#f7e6e8', p: 6 }} component='footer'>
+      <Box sx={{ bgcolor: '#f7e6e8', p: 10 }} component='footer'>
         <Typography
           variant='subtitle1'
           align='center'

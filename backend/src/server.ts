@@ -45,10 +45,10 @@ app.use(
     secret: process.env.secret!,
     cookie: {
       maxAge: 1000 * 60 * 30,
-      httpOnly: false,
+      httpOnly: false, //to work on localhost disable this
       // sameSite: 'none',
-      secure: true,
-      sameSite: 'none',
+      secure: true, // this too
+      sameSite: 'none', // this as well
     },
     rolling: true,
     store: MongoStore.create({
@@ -68,16 +68,16 @@ app.use(passport.session());
 app.use('/users', userRoute);
 app.use(auth);
 app.use('/notes', noteRoute);
-app.get('/*', function (req, res) {
-  res.sendFile(
-    path.join(__dirname.replace('backend', 'client/'), 'index.html'),
-    function (err) {
-      if (err) {
-        res.status(500).send(err);
-      }
-    }
-  );
-});
+// app.get('/*', function (req, res) {
+//   res.sendFile(
+//     path.join(__dirname.replace('backend', 'client/'), 'index.html'),
+//     function (err) {
+//       if (err) {
+//         res.status(500).send(err);
+//       }
+//     }
+//   );
+// });
 /*
  ** Error Handler
  */

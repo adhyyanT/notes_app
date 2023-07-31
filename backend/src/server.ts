@@ -21,19 +21,29 @@ const app = express();
  */
 app.use(
   cors({
-    origin: process.env.frontend!,
+    origin: true,
     credentials: true,
+    // methods:'*',
   })
 );
+// app.use(function (req, res, next) {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//   res.setHeader('Access-Control-Allow-Credentials', 'true');
+//   next();
+// });
+
 app.use(express.json());
 app.use(morgan('combined'));
 app.use(
   session({
-    saveUninitialized: true,
-    resave: true,
+    saveUninitialized: false,
+    resave: false,
     secret: process.env.secret!,
     cookie: {
       maxAge: 1000 * 60 * 30,
+      httpOnly: false,
     },
     rolling: true,
     store: MongoStore.create({

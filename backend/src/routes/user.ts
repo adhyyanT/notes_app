@@ -10,6 +10,7 @@ router
   .route('/login')
   .post(passport.authenticate('local'), async (req, res, next) => {
     try {
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
       const op = await user.findOne({ email: req.body.email });
       if (!op) throw createHttpError(400, 'User not found');
       req.session.user = op.username;

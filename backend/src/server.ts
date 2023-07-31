@@ -56,7 +56,7 @@ app.use(
     }),
   })
 );
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
 passportinit();
 app.use(cookieParser(process.env.secret!));
 app.use(passport.initialize());

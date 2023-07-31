@@ -20,7 +20,7 @@ const app = express();
  */
 app.use(
   cors({
-    origin: [process.env.frontend!],
+    origin: process.env.frontend!,
     credentials: true,
   })
 );
@@ -41,7 +41,7 @@ app.use(
   })
 );
 passportinit();
-app.use(cookieParser(process.env.secret));
+app.use(cookieParser(process.env.secret!));
 app.use(passport.initialize());
 app.use(passport.session());
 

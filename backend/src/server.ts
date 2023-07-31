@@ -28,8 +28,8 @@ app.use(express.json());
 app.use(morgan('combined'));
 app.use(
   session({
-    saveUninitialized: false,
-    resave: false,
+    saveUninitialized: true,
+    resave: true,
     secret: process.env.secret!,
     cookie: {
       maxAge: 1000 * 60 * 30,

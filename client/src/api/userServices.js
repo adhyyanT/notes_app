@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const login = async (email, password) => {
   try {
-    // console.log(process.env);
+    // console.log(import.meta.env.VITE_BACKEND);
     let config = {
       method: 'post',
       maxBodyLength: Infinity,

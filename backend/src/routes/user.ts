@@ -13,6 +13,7 @@ router
       const op = await user.findOne({ email: req.body.email });
       if (!op) throw createHttpError(400, 'User not found');
       req.session.user = op.username;
+      console.log(req.session.user);
       res.status(201).json({ sigin: true });
     } catch (error) {
       console.error(error);

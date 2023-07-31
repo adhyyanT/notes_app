@@ -126,7 +126,7 @@ export default function Notes() {
       setOpen(false);
     } catch (error) {
       if (error.message === 'not auth') {
-        navigate('/');
+        // navigate('/');
       }
       console.error(error);
     }
@@ -151,7 +151,7 @@ export default function Notes() {
       // console.log(cards);
     } catch (error) {
       if (error.message === 'not auth') {
-        navigate('/');
+        // navigate('/');
       }
       console.error(error);
     }

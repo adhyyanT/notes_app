@@ -21,8 +21,10 @@ const app = express();
  */
 app.use(
   cors({
-    origin: true,
+    origin: process.env.frontend,
+    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
     credentials: true,
+    allowedHeaders: 'Content-type',
     // methods:'*',
   })
 );
@@ -44,6 +46,9 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 30,
       httpOnly: false,
+      // sameSite: 'none',
+      secure: true,
+      sameSite: 'none',
     },
     rolling: true,
     store: MongoStore.create({

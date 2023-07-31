@@ -10,7 +10,6 @@ export const getNotes: RequestHandler = async (
   next: NextFunction
 ) => {
   try {
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
     const notes = await noteModel.find({ createdBy: req.session.user });
     return res.status(200).json(notes);
   } catch (error) {

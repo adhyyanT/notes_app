@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const getAllNotes = async () => {
   try {
+    console.log('Request to- ' + import.meta.env.VITE_backend + 'notes');
     let config = {
       method: 'get',
       maxBodyLength: Infinity,

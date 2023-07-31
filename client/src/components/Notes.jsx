@@ -164,7 +164,7 @@ export default function Notes() {
         setCards(res);
       } catch (error) {
         if (error.message === 'not auth') {
-          navigate('/');
+          // navigate('/');
         }
         console.error(error);
       }

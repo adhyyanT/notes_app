@@ -21,7 +21,7 @@ const app = express();
  */
 app.use(
   cors({
-    origin: process.env.frontend,
+    origin: [process.env.frontend!, process.env.backend!],
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'PATCH'],
     credentials: true,
     allowedHeaders: 'Content-type',
@@ -56,6 +56,7 @@ app.use(
     }),
   })
 );
+app.set('trust proxy', 1);
 passportinit();
 app.use(cookieParser(process.env.secret!));
 app.use(passport.initialize());

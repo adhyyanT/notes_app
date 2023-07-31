@@ -17,6 +17,8 @@ export const getAllNotes = async () => {
     return res.data;
   } catch (error) {
     console.error(error);
+    if (error.response.data.error === 'User not authorized')
+      throw new Error('not auth');
     return [];
   }
 };
@@ -41,8 +43,9 @@ export const createNote = async (title, text) => {
     // console.log(res.data);
     return res.data;
   } catch (error) {
-    console.error(error);
-    return error.response.data;
+    if (error.response.data.error === 'User not authorized')
+      throw new Error('not auth');
+    return error;
   }
 };
 export const deleteNote = async (id) => {

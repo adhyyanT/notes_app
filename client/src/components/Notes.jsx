@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
-import Link from '@mui/material/Link';
+import { green, purple } from '@mui/material/colors';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -28,19 +28,8 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 
-function Copyright() {
-  return (
-    <Typography variant='body2' color='text.secondary' align='center'>
-      {'Copyright © '}
-      <Link color='inherit' href='https://mui.com/'>
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 const Modalstyle = {
   position: 'absolute',
   top: '50%',
@@ -52,49 +41,77 @@ const Modalstyle = {
   boxShadow: 24,
   p: 4,
 };
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#0052cc',
+    },
+    secondary: {
+      main: green[500],
+    },
+  },
+});
 
 export default function Notes() {
+  const navigate = useNavigate();
   const [modalState, setModalState] = useState('Create');
   const [cards, setCards] = useState([]);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [updateNoteId, setUpdateNoteId] = useState(0);
+  const [err, setErr] = useState(false);
+  const [errMsg, setErrMsg] = useState('');
 
   const handleOpen = (state, id) => {
-    setModalState(state);
-    if (state === 'Create') {
-      setTitle('');
-      setText('');
-    }
-    if (state === 'Update') {
-      setUpdateNoteId(id);
-    }
-    if (state !== 'Create') {
-      for (let i = 0; i < cards.length; i++) {
-        if (cards[i]._id === id) {
-          setTitle(cards[i].title);
-          setText(cards[i].text);
-          break;
+    try {
+      setModalState(state);
+      if (state === 'Create') {
+        setTitle('');
+        setText('');
+      }
+      if (state === 'Update') {
+        setUpdateNoteId(id);
+      }
+      if (state !== 'Create') {
+        for (let i = 0; i < cards.length; i++) {
+          if (cards[i]._id === id) {
+            setTitle(cards[i].title);
+            setText(cards[i].text);
+            break;
+          }
         }
       }
+      setOpen(true);
+    } catch (error) {
+      console.log(error);
     }
-    setOpen(true);
   };
   const handleClose = () => setOpen(false);
   const handleCreateNote = async () => {
+    if (!title) {
+      setErr(true);
+      setErrMsg('Title cannot be empty');
+      return;
+    }
+    setErr(false);
     try {
       const res = await createNote(title, text);
       setCards([...cards, res]);
     } catch (error) {
-      console.error(error);
+      if (error.message === 'not auth') navigate('/');
     } finally {
       setOpen(false);
     }
   };
   const handleUpdateNote = async () => {
+    if (!title) {
+      setErr(true);
+      setErrMsg('Title cannot be empty');
+      return;
+    }
+    setErr(false);
     try {
       const res = await updateNote(updateNoteId, title, text);
       setTitle(res.title);
@@ -108,16 +125,15 @@ export default function Notes() {
       setCards(arr);
       setOpen(false);
     } catch (error) {
+      if (error.message === 'not auth') {
+        navigate('/');
+      }
       console.error(error);
     }
   };
-  // const handleModalChange = async (state) => {
-  //   setModalState(state);
-  // };
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
-    // console.log(title);
   };
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -134,14 +150,24 @@ export default function Notes() {
       }
       // console.log(cards);
     } catch (error) {
+      if (error.message === 'not auth') {
+        navigate('/');
+      }
       console.error(error);
     }
   };
 
   useEffect(() => {
     (async () => {
-      const res = await getAllNotes();
-      setCards(res);
+      try {
+        const res = await getAllNotes();
+        setCards(res);
+      } catch (error) {
+        if (error.message === 'not auth') {
+          navigate('/');
+        }
+        console.error(error);
+      }
     })();
   }, []);
   return (
@@ -198,6 +224,7 @@ export default function Notes() {
                       }
                       defaultValue={title}
                       onChange={handleTitleChange}
+                      disabled={modalState === 'View'}
                     />
                   </FormControl>
                   <TextField
@@ -208,7 +235,20 @@ export default function Notes() {
                     defaultValue={text}
                     fullWidth
                     onChange={handleTextChange}
+                    disabled={modalState === 'View'}
                   />
+                  {err && (
+                    <Grid container style={{ justifyContent: 'center' }}>
+                      <Typography
+                        component='h4'
+                        variant='h6'
+                        color={'red'}
+                        style={{ justifyContent: 'center' }}
+                      >
+                        {errMsg}
+                      </Typography>
+                    </Grid>
+                  )}
                   <Button
                     variant='contained'
                     sx={{
@@ -223,18 +263,12 @@ export default function Notes() {
                   >
                     {`${modalState}`} Note
                   </Button>
-                  {/* <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-                    Duis mollis, est non commodo luctus, nisi erat porttitor
-                    ligula.
-                  </Typography> */}
                 </Box>
               </Modal>
-              {/* <Button variant='outlined'>Secondary action</Button> */}
             </Stack>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth='md'>
-          {/* End hero unit */}
           <Grid container spacing={4}>
             {cards.map((card) => (
               <Grid item key={card._id} xs={12} sm={6} md={4}>
@@ -286,21 +320,16 @@ export default function Notes() {
         </Container>
       </main>
       {/* Footer */}
-      <Box sx={{ bgcolor: 'background.paper', p: 6 }} component='footer'>
-        <Typography variant='h6' align='center' gutterBottom>
-          Footer
-        </Typography>
+      <Box sx={{ bgcolor: '#f7e6e8', p: 6 }} component='footer'>
         <Typography
           variant='subtitle1'
           align='center'
           color='text.secondary'
           component='p'
         >
-          Something here to give the footer a purpose!
+          Made with ❤️, by Adhyyan.
         </Typography>
-        <Copyright />
       </Box>
-      {/* End footer */}
     </ThemeProvider>
   );
 }

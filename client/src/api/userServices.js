@@ -49,4 +49,23 @@ const signup = async (username, email, password) => {
     return error.response.data;
   }
 };
-export { login, signup };
+
+const logout = async () => {
+  try {
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      withCredentials: true,
+      url: import.meta.env.VITE_backend + 'users/logout',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    await axios.request(config);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+export { login, signup, logout };

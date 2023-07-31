@@ -13,6 +13,7 @@ import { passportinit, passport } from './config/passportinit';
 import userRoute from './routes/user';
 import MongoStore from 'connect-mongo';
 import auth from './middlewares/auth';
+import path from 'path';
 const app = express();
 
 /*
@@ -51,7 +52,16 @@ app.use(passport.session());
 app.use('/users', userRoute);
 app.use(auth);
 app.use('/notes', noteRoute);
-
+app.get('/*', function (req, res) {
+  res.sendFile(
+    path.join(__dirname.replace('backend', 'client/'), 'index.html'),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    }
+  );
+});
 /*
  ** Error Handler
  */

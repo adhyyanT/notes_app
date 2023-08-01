@@ -22,28 +22,33 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const [error, setError] = useState({ error: false, msg: '' });
+  const [progress, setProgress] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
+    setProgress(true);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
     if (!email) {
       setError({ error: true, msg: '*Email is required' });
+      setProgress(false);
       return;
     }
     if (!password) {
       setError({ error: true, msg: '*Password is required' });
+      setProgress(false);
       return;
     }
     setError({ error: false, msg: '' });
     const user = await login(email, password);
     if (user) {
+      setProgress(false);
       navigate('/notes');
     } else {
       setError({ error: true, msg: '*Invalid Credentials' });
     }
-    console.log(user);
+    setProgress(false);
   };
 
   return (
@@ -62,6 +67,9 @@ export default function Login() {
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
+            <Typography style={{ color: '#c2bbba' }}>
+              *Third party cookies should be enabled{' '}
+            </Typography>
             <Typography component='h1' variant='h5'>
               Sign in
             </Typography>
@@ -112,6 +120,7 @@ export default function Login() {
                 fullWidth
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
+                disabled={progress}
               >
                 Sign In
               </Button>

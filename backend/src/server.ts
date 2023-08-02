@@ -13,7 +13,7 @@ import { passportinit, passport } from './config/passportinit';
 import userRoute from './routes/user';
 import MongoStore from 'connect-mongo';
 import auth from './middlewares/auth';
-import path from 'path';
+
 const app = express();
 
 /*
@@ -28,13 +28,6 @@ app.use(
     // methods:'*',
   })
 );
-// app.use(function (req, res, next) {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//   res.setHeader('Access-Control-Allow-Credentials', 'true');
-//   next();
-// });
 
 app.use(express.json());
 app.use(morgan('combined'));
@@ -45,10 +38,10 @@ app.use(
     secret: process.env.secret!,
     cookie: {
       maxAge: 1000 * 60 * 30,
-      httpOnly: false, //to work on localhost disable this
+      // httpOnly: false, //to work on localhost disable this
       // sameSite: 'none',
-      secure: true, // this too
-      sameSite: 'none', // this as well
+      // secure: true, // this too
+      // sameSite: 'none', // this as well
     },
     rolling: true,
     store: MongoStore.create({
@@ -68,16 +61,6 @@ app.use(passport.session());
 app.use('/users', userRoute);
 app.use(auth);
 app.use('/notes', noteRoute);
-// app.get('/*', function (req, res) {
-//   res.sendFile(
-//     path.join(__dirname.replace('backend', 'client/'), 'index.html'),
-//     function (err) {
-//       if (err) {
-//         res.status(500).send(err);
-//       }
-//     }
-//   );
-// });
 /*
  ** Error Handler
  */

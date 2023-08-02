@@ -1,18 +1,50 @@
 # Notes App
 
-[Webpage](https://notes-app-ecru-phi.vercel.app/)  
-A web application that allows users to perform C.R.U.D operation on their notes. Users can also create their personal accounts to save their work.
+The Notes App is a simple web application that allows users to manage their notes efficiently. Users can create, read, update, and delete notes, making it a convenient tool for organizing their thoughts and information.
 
-### Tech Stack
+## <b>Website </b>
+
+You can access the web application by clicking [here.](https://notes-app-ecru-phi.vercel.app/)
+
+## <b>Tech Stack</b>
 
 - Node.js
 - Express.js with Typescript
 - React.js
 - MongoDB
 
-Authentication and authorization was handled using passport.js local strategy (session/cookie based), you can find the link to the webpage above.
+## <b> Features </b>
 
-# React + Vite
+- Create, Read, Update, and Delete (CRUD) operations on notes
+- User account creation and authentication
+- Personalized accounts to save and organize notes
+- Session and cookie-based authentication with Passport.js local strategy
+
+## Getting started
+
+To run the application locally, follow these steps:
+
+1.  Clone the repository.
+2.  Navigate to the project directory in your terminal.
+3.  Install the required dependencies using the package manager of your choice (npm or yarn).
+
+For the backend:
+
+    cd backend
+    npm install   # or yarn install
+    npm start     # or yarn start
+
+For the frontend:
+
+    cd frontend
+    npm install   # or yarn install
+    npm start     # or yarn start
+
+### <b>Authentication and Authorization</b>
+
+The application implements authentication and authorization using Passport.js with a local strategy, which is session and cookie-based for improved security.
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

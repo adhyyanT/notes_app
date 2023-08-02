@@ -38,10 +38,10 @@ app.use(
     secret: process.env.secret!,
     cookie: {
       maxAge: 1000 * 60 * 30,
-      // httpOnly: false, //to work on localhost disable this
+      httpOnly: false, //to work on localhost disable this
       // sameSite: 'none',
-      // secure: true, // this too
-      // sameSite: 'none', // this as well
+      secure: true, // this too
+      sameSite: 'none', // this as well
     },
     rolling: true,
     store: MongoStore.create({

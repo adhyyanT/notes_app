@@ -128,9 +128,9 @@ export default function Login() {
               <Grid container style={{ justifyContent: 'center' }}>
                 <Grid item>
                   <Link
-                    href='#'
+                    href='/signup'
                     variant='body2'
-                    onClick={() => navigate('/signup')}
+                    // onClick={() => navigate('/signup')}
                   >
                     {"Don't have an account? Sign Up"}
                   </Link>

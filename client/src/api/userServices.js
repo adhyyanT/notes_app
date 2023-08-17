@@ -43,10 +43,10 @@ const signup = async (username, email, password) => {
       },
     };
     const res = await axios.request(config);
-    return 'Success';
+    if (res) return { msg: true, err: null };
   } catch (error) {
     console.error(error.response.data);
-    return error.response.data;
+    return { msg: false, err: error.response.data };
   }
 };
 

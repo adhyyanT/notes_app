@@ -66,7 +66,7 @@ const Signup = () => {
     setProgress(true);
     setIsValidUsername(true);
     const res = await signup(username, email, password);
-    if (res.msg) navigate('/');
+    if (res.msg) navigate('/notes');
     else {
       if (res.err.includes('email')) {
         setIsValidEmail(false);

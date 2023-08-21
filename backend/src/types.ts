@@ -1,14 +1,16 @@
-import { Request, RequestHandler } from 'express';
-
+export interface RegisterReq {
+  username: string;
+  email: string;
+  password: string;
+}
+export interface LoginReq {
+  email: string;
+  password: string;
+}
 export interface CreateNoteReq {
-  title?: string;
-  text?: string;
+  title: string;
+  text: string;
 }
-
-export interface UpdateNoteReq {
-  title?: string;
-  text?: string;
-}
-export interface UpdateNoteUrlParams {
+export interface GetNoteParam {
   noteId: string;
 }

@@ -63,7 +63,8 @@ export default function Notes() {
   const [updateNoteId, setUpdateNoteId] = useState(0);
   const [err, setErr] = useState(false);
   const [errMsg, setErrMsg] = useState('');
-
+  const [disableDelete, setDisableDelete] = useState(false);
+  const [disableCommon, setDisableCommon] = useState(false);
   const handleOpen = (state, id) => {
     try {
       setModalState(state);
@@ -76,7 +77,7 @@ export default function Notes() {
       }
       if (state !== 'Create') {
         for (let i = 0; i < cards.length; i++) {
-          if (cards[i]._id === id) {
+          if (cards[i].notes_id === id) {
             setTitle(cards[i].title);
             setText(cards[i].text);
             break;
@@ -90,9 +91,11 @@ export default function Notes() {
   };
   const handleClose = () => setOpen(false);
   const handleCreateNote = async () => {
+    setDisableCommon(true);
     if (!title) {
       setErr(true);
       setErrMsg('Title cannot be empty');
+      setDisableCommon(false);
       return;
     }
     setErr(false);
@@ -102,13 +105,16 @@ export default function Notes() {
     } catch (error) {
       if (error.message === 'not auth') navigate('/');
     } finally {
+      setDisableCommon(false);
       setOpen(false);
     }
   };
   const handleUpdateNote = async () => {
+    setDisableCommon(true);
     if (!title) {
       setErr(true);
       setErrMsg('Title cannot be empty');
+      setDisableCommon(false);
       return;
     }
     setErr(false);
@@ -118,7 +124,7 @@ export default function Notes() {
       setText(res.text);
       let arr = cards;
       arr.map((card) => {
-        if (card._id == updateNoteId) {
+        if (card.notes_id == updateNoteId) {
           (card.title = res.title), (card.text = res.text);
         }
       });
@@ -129,6 +135,8 @@ export default function Notes() {
         navigate('/');
       }
       console.error(error);
+    } finally {
+      setDisableCommon(false);
     }
   };
 
@@ -139,12 +147,13 @@ export default function Notes() {
     setText(e.target.value);
   };
   const handleDeleteCard = async (e, id) => {
+    setDisableDelete(true);
     try {
       const res = await deleteNote(id);
       if (res.success === true) {
         setCards(
           cards.filter((card) => {
-            return card._id !== id;
+            return card.notes_id !== id;
           })
         );
       }
@@ -154,6 +163,8 @@ export default function Notes() {
         navigate('/');
       }
       console.error(error);
+    } finally {
+      setDisableDelete(false);
     }
   };
 
@@ -260,6 +271,7 @@ export default function Notes() {
                         ? handleCreateNote
                         : handleUpdateNote
                     }
+                    disabled={disableCommon}
                   >
                     {`${modalState}`} Note
                   </Button>
@@ -271,7 +283,7 @@ export default function Notes() {
         <Container sx={{ py: 8 }} maxWidth='md'>
           <Grid container spacing={4}>
             {cards.map((card) => (
-              <Grid item key={card._id} xs={12} sm={6} md={4}>
+              <Grid item key={card.notes_id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{
                     height: '100%',
@@ -296,19 +308,20 @@ export default function Notes() {
                   <CardActions>
                     <Button
                       size='small'
-                      onClick={() => handleOpen('View', card._id)}
+                      onClick={() => handleOpen('View', card.notes_id)}
                     >
                       View
                     </Button>
                     <Button
                       size='small'
-                      onClick={() => handleOpen('Update', card._id)}
+                      onClick={() => handleOpen('Update', card.notes_id)}
                     >
                       Edit
                     </Button>
                     <Button
                       size='small'
-                      onClick={(e) => handleDeleteCard(e, card._id)}
+                      onClick={(e) => handleDeleteCard(e, card.notes_id)}
+                      disabled={disableDelete}
                     >
                       Delete
                     </Button>

@@ -1,1 +1,4 @@
 client/.env
+old
+backend/.env
+backend/node_modules
